@@ -1,0 +1,45 @@
+# Import necessary libraries
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+# Load your mall customers dataset
+# Replace 'your_data.csv' with your actual data file or database connection code
+mall_data = pd.read_csv('your_data.csv')
+
+# Select relevant features for clustering
+# Replace 'feature1', 'feature2', etc. with your actual feature names
+features = mall_data[['Age', 'Annual Income', 'Spending Score']]
+
+# Standardize the features
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(features)
+
+# Determine the optimal number of clusters using the Elbow Method
+max_clusters = 10
+inertia = []
+
+for i in range(1, max_clusters + 1):
+    kmeans = KMeans(n_clusters=i, random_state=42)
+    kmeans.fit(scaled_features)
+    inertia.append(kmeans.inertia_)
+
+# Plot the Elbow Method to find the optimal number of clusters
+plt.plot(range(1, max_clusters + 1), inertia, marker='o')
+plt.title('Elbow Method for Optimal Clusters')
+plt.xlabel('Number of Clusters')
+plt.ylabel('Inertia')
+plt.show()
+
+# Choose the optimal number of clusters and perform K-means clustering
+optimal_clusters = 4  # Adjust based on the Elbow Method plot
+kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+mall_data['cluster'] = kmeans.fit_predict(scaled_features)
+
+# Analyze the results
+# You can now analyze each cluster to understand the characteristics of different customer segments
+
+# Example: Print the mean values of features for each cluster
+cluster_means = mall_data.groupby('cluster').mean()
+print(cluster_means)
