@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # Load your mall customers dataset
 # Replace 'your_data.csv' with your actual data file or database connection code
-mall_data = pd.read_csv('your_data.csv')
+mall_data = pd.read_csv('Mall_Customer.csv')
 
 # Select relevant features for clustering
 # Replace 'feature1', 'feature2', etc. with your actual feature names
