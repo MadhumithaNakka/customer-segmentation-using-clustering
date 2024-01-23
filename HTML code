@@ -1,0 +1,67 @@
+// html code named "index.html"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Segmentation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Customer Segmentation</h1>
+        <div>
+            <label for="data">Enter data (comma-separated):</label>
+            <textarea id="data" rows="4" cols="50"></textarea>
+        </div>
+        <div>
+            <label for="k">Number of clusters (k):</label>
+            <input type="number" id="k" min="1" value="3">
+        </div>
+        <button onclick="segment()">Segment</button>
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+//css code named "style.css"
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+textarea, input {
+    margin: 10px;
+}
+
+
+//js code named "script.js"
+function segment() {
+    const data = document.getElementById('data').value.split(',').map(Number);
+    const k = document.getElementById('k').value;
+
+    fetch('/segment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data, k }),
+    })
+    .then(response => response.json())
+    .then(result => {
+        document.getElementById('result').innerHTML = `<p>Cluster Labels: ${result.labels.join(', ')}</p>`;
+    });
+}
+
